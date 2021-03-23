@@ -42,7 +42,8 @@ RUN gem install one_gadget seccomp-tools
 # Configuration
 RUN ln -s /usr/bin/python3 /usr/bin/python && \
     echo "source ~/.pwn_funcs" >> ~/.bashrc && \
-    echo "alias .p='source ~/.pwn_funcs'" >> ~/.bashrc
+    echo "alias .p='source ~/.pwn_funcs'" >> ~/.bashrc && \
+    mkdir /root/HeapLAB
 
 RUN mkdir ~/work
 WORKDIR /root/work
