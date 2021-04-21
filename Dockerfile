@@ -8,16 +8,28 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN dpkg --add-architecture i386 && \
     apt update -y \
     && apt upgrade -y \
-    && apt install -y socat gdb gdb-multiarch libc6-dbg libc6-dbg:i386 git binutils gcc-multilib g++-multilib curl wget make libssl-dev build-essential ruby ruby-dev radare2 netcat tmux nasm ltrace strace vim python3 python3-pip
+    && apt install -y socat gdb gdb-multiarch libc6-dbg libc6-dbg:i386 git binutils gcc-multilib g++-multilib curl wget make libssl-dev build-essential ruby ruby-dev radare2 netcat tmux nasm ltrace strace vim python3 python3-dev
 
-RUN python3 -m pip install -U pip && \
+# Install old version of pip to match python 3.5 on older platforms (Ubuntu 16.04 and before)
+RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5 && \
     python3 -m pip install --no-cache-dir \
+    cffi \
     ropgadget \
     pwntools \
     ropper \
     unicorn \
     keystone-engine \
     capstone
+
+# pip installs for Ubuntu 18.04 and later
+# RUN python3 -m pip install -U pip && \
+#     python3 -m pip install --no-cache-dir \
+#     ropgadget \
+#     pwntools \
+#     ropper \
+#     unicorn \
+#     keystone-engine \
+#     capstone
 
 # Install tmux from source
 RUN apt update \
@@ -37,10 +49,12 @@ RUN TMUX_VERSION=$(curl -s https://api.github.com/repos/tmux/tmux/releases/lates
 RUN git clone --depth 1 https://github.com/pwndbg/pwndbg ~/pwndbg && \
     cd ~/pwndbg && chmod +x setup.sh && ./setup.sh
 
-RUN gem install one_gadget seccomp-tools
+# Might need to disable this for Ubuntu 16.04 and before
+# RUN gem install one_gadget seccomp-tools
 
 # Configuration
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
+RUN rm /usr/bin/python && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
     echo "source ~/.pwn_funcs" >> ~/.bashrc && \
     echo "alias .p='source ~/.pwn_funcs'" >> ~/.bashrc && \
     mkdir /root/HeapLAB
