@@ -13,18 +13,10 @@ RUN dpkg --add-architecture i386 && \
     && apt install -y socat gdb gdb-multiarch libc6-dbg libc6-dbg:i386 git binutils gcc-multilib g++-multilib curl wget make libssl-dev build-essential ruby ruby-dev radare2 netcat tmux nasm ltrace strace vim python3 python3-dev libffi-dev
 
 # Install old version of pip to match python 3.5 on older platforms (Ubuntu 16.04 and before)
-RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5 && \
-    python3 -m pip install --no-cache-dir \
-    cffi \
-    ropgadget \
-    pwntools \
-    ropper \
-    unicorn \
-    keystone-engine \
-    capstone
-
-# pip installs for Ubuntu 18.04 and later
-# RUN python3 -m pip install -U pip && \
+# python3.4 for Ubuntu 14.04
+# python3.5 for Ubuntu 16.04
+# RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5 && \
+# RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.4/get-pip.py | python3.4 && \
 #     python3 -m pip install --no-cache-dir \
 #     ropgadget \
 #     pwntools \
@@ -32,6 +24,17 @@ RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5 && \
 #     unicorn \
 #     keystone-engine \
 #     capstone
+
+# pip installs for Ubuntu 18.04 and later
+RUN apt install -y python3-pip && \
+    python3 -m pip install -U pip && \
+    python3 -m pip install --no-cache-dir \
+    ropgadget \
+    pwntools \
+    ropper \
+    unicorn \
+    keystone-engine \
+    capstone
 
 # Install tmux from source
 RUN apt update \
