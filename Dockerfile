@@ -5,10 +5,12 @@ LABEL maintainer="nandkeypull@outlook.com"
 # Prevent tz setting from hanging build
 ARG DEBIAN_FRONTEND=noninteractive
 
+# python3-dev: for Python.h
+# libffi-dev: for ffi.h
 RUN dpkg --add-architecture i386 && \
     apt update -y \
     && apt upgrade -y \
-    && apt install -y socat gdb gdb-multiarch libc6-dbg libc6-dbg:i386 git binutils gcc-multilib g++-multilib curl wget make libssl-dev build-essential ruby ruby-dev radare2 netcat tmux nasm ltrace strace vim python3 python3-dev
+    && apt install -y socat gdb gdb-multiarch libc6-dbg libc6-dbg:i386 git binutils gcc-multilib g++-multilib curl wget make libssl-dev build-essential ruby ruby-dev radare2 netcat tmux nasm ltrace strace vim python3 python3-dev libffi-dev
 
 # Install old version of pip to match python 3.5 on older platforms (Ubuntu 16.04 and before)
 RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3.5 && \
