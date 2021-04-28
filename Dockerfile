@@ -58,7 +58,7 @@ RUN git clone --depth 1 https://github.com/pwndbg/pwndbg ~/pwndbg && \
 # RUN gem install one_gadget seccomp-tools
 
 # Configuration
-RUN rm /usr/bin/python && \
+RUN rm /usr/bin/python; \
     ln -s /usr/bin/python3 /usr/bin/python && \
     echo "source ~/.pwn_funcs" >> ~/.bashrc && \
     echo "alias .p='source ~/.pwn_funcs'" >> ~/.bashrc && \
